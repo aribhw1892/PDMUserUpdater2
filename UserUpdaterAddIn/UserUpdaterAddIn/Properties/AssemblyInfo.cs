@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UserUpdater")]
+[assembly: AssemblyTitle("UserUpdaterAddIn")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UserUpdater")]
+[assembly: AssemblyProduct("UserUpdaterAddIn")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3a1288a8-dc5c-46b4-8b91-5aaee0f1e9d2")]
+[assembly: Guid("256250eb-cb05-44de-9740-4d1f7c6f2dab")]
 
 // Version information for an assembly consists of the following four values:
 //
