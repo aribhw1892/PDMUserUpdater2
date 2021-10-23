@@ -20,6 +20,9 @@ namespace UserUpdaterAddIn
         private string mCn;
         //Email address
         private string mUsername;
+        //Login
+        private string mOperation;
+        private string mLogin;
 
         public User()
         {
@@ -54,6 +57,17 @@ namespace UserUpdaterAddIn
         {
             get { return mUsername; }
             set { mUsername = value; }
+        }
+        public string operation
+        {
+            get { return mOperation; }
+            set { mOperation = value; }
+        }
+
+        public string login
+        {
+            get { return mLogin; }
+            set { mLogin = value; }
         }
     }
 }

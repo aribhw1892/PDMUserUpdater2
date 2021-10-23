@@ -12,6 +12,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Collections;
+using System.Xml.Serialization;
+using System.Xml;
+
 
 namespace UnitTestProject
 {
@@ -28,7 +32,6 @@ namespace UnitTestProject
             //vault = new EdmVault5();
             //Obtain the only instance of the IEdmVaultObject
             IEdmVault5 vault = EdmVaultSingleton.Instance;
-            //vault.Login("admin", "", "CBFTest");
             vault.Login("admin", "", "UserUpdater");
 
             EdmCmd cmd = new EdmCmd();
@@ -43,6 +46,83 @@ namespace UnitTestProject
 
             UserUpdaterAddIn.UserUpdaterAddIn addin = new UserUpdaterAddIn.UserUpdaterAddIn();
             addin.OnCmd(ref cmd, ref cmdDatas);
+        }
+        
+
+        [TestMethod]
+        public void XmlUserReaderTest()
+        {
+            IEdmFile7 file; //Parent DrawingFile
+            IEdmFolder5 folder;
+            IEdmVault7 vault = EdmVaultSingleton.Instance;
+            vault.Login("admin", "", "UserUpdater");
+
+            string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+            //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
+            ArrayList xmlData = UserUpdaterAddIn.XMLHelper.XmlUserReader(xmlPath);
+        }
+
+        [TestMethod]
+        public void AddUserTest()
+        {
+            try
+            {
+                IEdmFile7 file; //Parent DrawingFile
+                IEdmFolder5 folder;
+                IEdmVault7 vault = EdmVaultSingleton.Instance;
+                vault.Login("admin", "", "UserUpdater");
+
+                string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+                //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
+                ArrayList xmlData = UserUpdaterAddIn.XMLHelper.XmlUserReader(xmlPath);
+                var addUserList = from User e in xmlData where e.operation.ToLower().Equals("add") select e;
+                ArrayList addUser = new ArrayList();
+                //for (int i = 0; i <= addUserList.Count() - 1; i++)
+                foreach (var user in addUserList)
+                {
+                    addUser.Add(user);
+                }
+
+                UserUpdaterAddIn.UserHelper.AddUser(vault, xmlData);
+            }
+            catch(System.Runtime.InteropServices.COMException ex)
+            {
+
+            }
+            catch
+            {
+
+            }
+            
+
+            // Can be passed the whole array without filtering ass existing User will not add.
+
+        }
+
+        [TestMethod]
+        public void RemoveUserTest()
+        {
+            IEdmFile7 file; //Parent DrawingFile
+            IEdmFolder5 folder;
+            IEdmVault7 vault = EdmVaultSingleton.Instance;
+            vault.Login("admin", "", "UserUpdater");
+
+            string userName = "jsmith";
+            IEdmUser9 user = UserHelper.GetUserObject(vault, userName);
+            UserUpdaterAddIn.UserHelper.RemoveUser(vault, user);
+        }
+
+        [TestMethod]
+        public void GetUserObjectUpdateTest()
+        {
+            IEdmFile7 file; //Parent DrawingFile
+            IEdmFolder5 folder;
+            IEdmVault7 vault = EdmVaultSingleton.Instance;
+            vault.Login("admin", "", "UserUpdater");
+
+            string userName = "admin";
+            IEdmUser9 user = UserHelper.GetUserObject(vault, userName);
+            //UserHelper.UpdateUser(vault, user);
         }
     }
 }

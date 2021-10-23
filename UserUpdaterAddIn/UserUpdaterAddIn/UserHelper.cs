@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 using EPDM.Interop.epdm;
 using System.Collections;
 using System.Windows.Forms;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace UserUpdaterAddIn
 {
-    class UserHelper
+    public static class UserHelper
     {
         //Add User To PDM
-        public static void AddUser(IEdmVault7 vault, ArrayList NewUsers)
+        public static void AddUser(IEdmVault7 vault, ArrayList newUsers)
         {
             try
             {
@@ -20,17 +25,21 @@ namespace UserUpdaterAddIn
 				IEdmUserMgr7 UsrMgr = (IEdmUserMgr7)vault;
 
 				//Declare EdmUserData array to hold new user data
-				EdmUserData2[] UserData = new EdmUserData2[NewUsers.Count];
+				EdmUserData2[] UserData = new EdmUserData2[newUsers.Count];
 
 				//Set the EdmUserData members for each new user
-				for (int i = 0; i <= NewUsers.Count - 1; i++)
+				for (int i = 0; i <= newUsers.Count - 1; i++)
 				{
-					if (NewUsers[i] != null)
+					if (newUsers[i] != null)
 					{
-						UserData[i].mbsCompleteName = (NewUsers[i] as User).cn;
-						UserData[i].mbsEmail = (NewUsers[i] as User).username;
-						UserData[i].mbsInitials = (NewUsers[i] as User).givenName.Substring(0, 1) + (NewUsers[i] as User).sn.Substring(0, 1);
-						UserData[i].mbsUserName = (NewUsers[i] as User).username.Split('@')[0];
+						UserData[i].mbsCompleteName = (newUsers[i] as User).cn;
+						UserData[i].mbsEmail = (newUsers[i] as User).username;
+						UserData[i].mbsInitials = (newUsers[i] as User).givenName.Substring(0, 1) + (newUsers[i] as User).sn.Substring(0, 1);
+						UserData[i].mbsUserName = (newUsers[i] as User).username.Split('@')[0];
+						//TODO: More Attributes To Add
+						//TODO: Add group Attribute
+
+
 						//Return user's IEdmUser6 interface in mpoUser
 						UserData[i].mlFlags = (int)EdmUserDataFlags.Edmudf_GetInterface;
 						//Add this user even if others cannot be added
@@ -48,22 +57,22 @@ namespace UserUpdaterAddIn
 				//Add the users to the vault
 				UsrMgr.AddUsers2(ref UserData);
 
-				string msg = "";
+				//Logging User Add data 
+				string addUserlog = "";
 				foreach (EdmUserData2 usr in UserData)
 				{
 					if (usr.mhStatus == 0)
-
 					{
-						msg += "Created user \"" + usr.mpoUser.Name + "\" successfully. ID = " + usr.mpoUser.ID.ToString() + "\n";
-
+						addUserlog += "Created user \"" + usr.mpoUser.Name + "\" successfully. ID = " + usr.mpoUser.ID.ToString() + "\n";
 					}
 					else
 					{
 						IEdmVault11 vault2 = (IEdmVault11)vault;
-						msg += "Error creating user \"" + usr.mbsUserName + "\" - " + vault2.GetErrorMessage(usr.mhStatus) + "\n";
+						addUserlog += "Error creating user \"" + usr.mbsUserName + "\" - " + vault2.GetErrorMessage(usr.mhStatus) + "\n";
 					}
 				}
-				//MessageBox.Show(msg);
+				//TODO: Need to check as log is not writing
+				LogWriter.WriteLog(addUserlog);
 			}
 			catch (System.Runtime.InteropServices.COMException ex)
 			{
@@ -86,7 +95,7 @@ namespace UserUpdaterAddIn
 				//user = (IEdmUser9)UsrMgr.GetUser(userName);
 				if ((user == null))
 				{
-					MessageBox.Show("No user set to remove. Click Add users.");
+					Debug.Print("No more user to remove");
 					return;
 				}
 
@@ -94,25 +103,7 @@ namespace UserUpdaterAddIn
 				users[0] = user.ID;
 				UsrMgr.RemoveUsers(users);
 
-				MessageBox.Show("User " + user.Name + " removed.");
-
-				////Send message to all users with permission
-				////to update users and groups 
-				//IEdmPos5 UserPos = default(IEdmPos5);
-				//UserPos = UsrMgr.GetFirstUserPosition();
-				//while (!UserPos.IsNull)
-				//{
-				//	IEdmUser9 userWithPerm = default(IEdmUser9);
-				//	userWithPerm = (IEdmUser9)UsrMgr.GetNextUser(UserPos);
-				//	if (userWithPerm.IsLoggedIn)
-				//	{
-				//		if (userWithPerm.HasSysRightEx(EdmSysPerm.EdmSysPerm_EditUserMgr))
-				//		{
-				//			userWithPerm.SendMsg("ALERT: user removed", "User " + user.Name + " removed.");
-				//		}
-				//	}
-				//}
-
+				Debug.Print("User " + user.Name + " removed.");
 			}
 			catch (System.Runtime.InteropServices.COMException ex)
 			{
@@ -147,12 +138,60 @@ namespace UserUpdaterAddIn
 			return user;
 		}
 
-        //Update User To PDM
-		public static void GetAllUserFromVault(IEdmVault7 vault)
+		//Update User To PDM
+		public static void UpdateUser(IEdmVault7 vault, IEdmUser9 user, User userValues)
+		{
+			try
+			{
+				//Get the user search interface 
+				IEdmFindUser poFind = default(IEdmFindUser);
+				poFind = (IEdmFindUser)vault.CreateUtility(EdmUtility.EdmUtil_FindUser);
+
+				//Search for a user with LoginName
+				poFind.SetPropt(EdmFindUserProp.Edmfup_LoginName, user.Name);
+				string val = null;
+				val = (string)poFind.GetPropt(EdmFindUserProp.Edmfup_LoginName);
+				poFind.SilentFind();
+				IEdmEnum poResult = default(IEdmEnum);
+				poResult = poFind.Result;
+                IEdmUser10 poUser = default(IEdmUser10);
+				EdmUserDataEx UserInfo = new EdmUserDataEx();
+
+				//Specify which user data fields are valid
+				UserInfo.mlEdmUserDataExFlags = (int)EdmUserDataExFlag.Edmudex_All;
+
+				foreach (object foundUser in poResult)
+				{
+					poUser = (IEdmUser10)foundUser;
+
+					//Get user's information
+					poUser.GetUserDataEx(ref UserInfo);
+
+					//TODO: Update user's information - Add Data Model
+					UserInfo.mbsCompleteName = userValues.cn.ToString();
+					UserInfo.mbsEmail = userValues.username.ToString();
+					UserInfo.mbsInitials = userValues.givenName.Substring(0, 1) + userValues.sn.Substring(0, 1); ;
+					poUser.SetUserDataEx(ref UserInfo);
+				}
+				//Update UserData
+				user.UserData = "Changed System Addmin User Data 2";
+			}
+			catch (System.Runtime.InteropServices.COMException ex)
+			{
+				MessageBox.Show("HRESULT = 0x" + ex.ErrorCode.ToString("X") + "\n" + ex.Message);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+		
+		//Get All Users From Vault
+		public static List<string> GetAllUserFromVault(IEdmVault7 vault)
         {
-            //Declare an IEdmUserMgr9 object
-            //IEdmUserMgr9 UserMgr = default(IEdmUserMgr9);
-            IEdmUserMgr9 UserMgr = (IEdmUserMgr9)vault.CreateUtility(EdmUtility.EdmUtil_UserMgr);
+
+			List<string> vaultUsers = new List<string>();
+			IEdmUserMgr9 UserMgr = (IEdmUserMgr9)vault.CreateUtility(EdmUtility.EdmUtil_UserMgr);
 
             EdmStatePermission[] ppoPermissions = {};
             EdmTransitionPermission[] ppoTransitionPermissions = {};
@@ -166,43 +205,10 @@ namespace UserUpdaterAddIn
             {
                 User = UserMgr.GetNextUser(UserPos);
                 Users = Users + User.Name + " ID: " + User.ID + "\n";
-            }
-
-            MessageBox.Show(Users, vault.Name + " Vault Users", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            //Get permissions for all states for a user 
-            UserMgr.GetStatePermissions(User.ID, EdmObjectType.EdmObject_User, 0, out ppoPermissions);
-            string str = null;
-            str = "EdmStatePermissions for a user in the vault" + "\n";
-            str = str + "\n";
-            foreach (EdmStatePermission item in ppoPermissions)
-            {
-
-                str = str + "mlOwnerID: " + item.mlOwnerID + "\n";
-                str = str + "meOwnerType (EdmObjectType.EdmObject_User (7) or EdmObjectType.EdmObject_UserGroup (8)): " + item.meOwnerType + "\n";
-                str = str + "mlStateID: " + item.mlStateID + "\n";
-                str = str + "mlEdmRightFlag as defined in EdmRightFlags: " + item.mlEdmRightFlag + "\n";
-                str = str + "\n";
-
-            }
-            MessageBox.Show(str);
-
-            //Get permissions for all transitions for a user 
-            UserMgr.GetTransitionPermissions(User.ID, EdmObjectType.EdmObject_User, 0, out ppoTransitionPermissions);
-            str = "EdmTransitionPermissions for a user in the vault" + "\n";
-            str = str + "\n";
-            foreach (EdmTransitionPermission item in ppoTransitionPermissions)
-            {
-
-                str = str + "mlOwnerID: " + item.mlOwnerID + "\n";
-                str = str + "meOwnerType (EdmObjectType.EdmObject_User (7) or EdmObjectType.EdmObject_UserGroup (8)): " + item.meOwnerType + "\n";
-                str = str + "mlTransitionID: " + item.mlTransitionID + "\n";
-                str = str + "mlEdmRightFlag as defined in EdmTransitionRightFlags: " + item.mlEdmRightFlag + "\n";
-                str = str + "\n";
-
-            }
-            MessageBox.Show(str);
-        }
+				vaultUsers.Add(User.Name);
+			}
+			return vaultUsers;
+		}
 
         //Add User To Group
 		public static void AddUserToGroup(IEdmVault7 vault, IEdmUserGroup8 group, IEdmUser9 user)

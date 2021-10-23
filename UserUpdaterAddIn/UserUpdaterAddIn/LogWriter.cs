@@ -74,7 +74,8 @@ namespace UserUpdaterAddIn
             DirectoryInfo logDirInfo = null;
             FileInfo logFileInfo;
 
-            string logFilePath = context.Current.Server.MapPath("~/ExceptionDetailsFile/");
+            string logFilePath = Path.Combine(Environment.CurrentDirectory, @"Log\");
+            //context.Current.Server.MapPath("~/ExceptionDetailsFile/");
             logFilePath = logFilePath + "General_log" + ".txt";
             logFileInfo = new FileInfo(logFilePath);
             logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);

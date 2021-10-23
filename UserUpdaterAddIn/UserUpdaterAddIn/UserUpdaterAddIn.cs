@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Collections;
 
 namespace UserUpdaterAddIn
 {
@@ -50,16 +53,91 @@ namespace UserUpdaterAddIn
             //        System.Windows.Forms.MessageBox.Show("C# Add-in");
             //    }
             //}
-            if ((poCmd.mbsComment) == "UserUpdater")
+            if ((poCmd.mbsComment) == "UserUpdaterAddIn")
             {
                 int winHandle = poCmd.mlParentWnd;
+                IEdmUser9 user;
                 // Get Vault Object
                 // Obtain the only instance of the IEdmVaultObject
                 vault = EdmVaultSingleton.Instance;
 
+                
+                //Get All User Data from XML
+                    //*8Change before Release
+                string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+                //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
+                ArrayList xmlUserData = XMLHelper.XmlUserReader(xmlPath);
+                
+                //Add USER
+                //Get users To Add
+                ArrayList addUserList = GetUserToAdd(xmlUserData);
+                //Add Users
+                UserHelper.AddUser(vault, addUserList);
+                
+                //Update USERS
+                List<string> vaultUsers = UserHelper.GetAllUserFromVault(vault);
+                ArrayList updateUsersList = GetUserToUpdate(xmlUserData, vaultUsers);
+
+                for (int i = 0; i <= updateUsersList.Count - 1; i++)
+                {
+                    //Get User Object
+                    user = UserHelper.GetUserObject(vault, (updateUsersList[i] as User).username.Split('@')[0]);
+                    UserHelper.UpdateUser(vault, user, (updateUsersList[i] as User));
+                }
+
+                // Remove Users
+                //Get users To Remove
+                ArrayList removeUserList = GetUserToRemove(xmlUserData);
+                //Remove Users
+                for (int i = 0; i <= removeUserList.Count - 1; i++)
+                {
+                    //Get User Object
+                    user = UserHelper.GetUserObject(vault, (removeUserList[i] as User).username.Split('@')[0]);
+                    UserHelper.RemoveUser(vault, user);
+                }
 
             }
 
         }
+        // Get All User To Add 
+        public static ArrayList GetUserToAdd(ArrayList allUserData)
+        {
+            ArrayList addUser = new ArrayList();
+            var addUserList = from User e in allUserData where e.operation.ToLower().Equals("add") select e;
+            foreach (var user in addUserList)
+            {
+                addUser.Add(user);
+            }
+
+            return addUser;
+        }
+        // Get All User To Update
+        public static ArrayList GetUserToUpdate(ArrayList allUserData, List<string> vaultUsers)
+        {
+            ArrayList updateUser = new ArrayList();
+            for (int i = 0; i <= allUserData.Count - 1; i++)
+            {
+                if (vaultUsers.Any(e => e == (allUserData[i] as User).username.ToLower().Split('@')[0]))
+                {
+                    updateUser.Add(allUserData[i] as User);
+                }
+            }
+            return updateUser;
+        }
+        // Get All User To Remove
+        public static ArrayList GetUserToRemove(ArrayList allUserData)
+        {
+            ArrayList removeUser = new ArrayList();
+            var addUserList = from User e in allUserData where e.operation.ToLower().Equals("remove") select e;
+            foreach (var user in addUserList)
+            {
+                removeUser.Add(user);
+            }
+
+            return removeUser;
+        }
+        
+
+
     }
 }
