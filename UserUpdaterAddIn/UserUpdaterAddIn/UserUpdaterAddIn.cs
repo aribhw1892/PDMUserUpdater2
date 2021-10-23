@@ -40,8 +40,8 @@ namespace UserUpdaterAddIn
 
         public void OnCmd(ref EdmCmd poCmd, ref EdmCmdData[] ppoData) //EdmCmdData[]
         {
-            IEdmFile8 drawing;
-            IEdmFolder5 folder;
+            //IEdmFile8 drawing;
+            //IEdmFolder5 folder;
             IEdmVault7 vault;
 
             // Check Command

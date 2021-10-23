@@ -25,8 +25,8 @@ namespace UnitTestProject
         [TestMethod]
         public void TestEntireCmd()
         {
-            IEdmFile7 file; //Parent DrawingFile
-            IEdmFolder5 folder;
+            //IEdmFile7 file; //Parent DrawingFile
+            //IEdmFolder5 folder;
             //IEdmVault7 vault;
             //Fileobject to find child drawings
             //vault = new EdmVault5();
@@ -52,8 +52,7 @@ namespace UnitTestProject
         [TestMethod]
         public void XmlUserReaderTest()
         {
-            IEdmFile7 file; //Parent DrawingFile
-            IEdmFolder5 folder;
+            
             IEdmVault7 vault = EdmVaultSingleton.Instance;
             vault.Login("admin", "", "UserUpdater");
 
@@ -67,8 +66,7 @@ namespace UnitTestProject
         {
             try
             {
-                IEdmFile7 file; //Parent DrawingFile
-                IEdmFolder5 folder;
+                
                 IEdmVault7 vault = EdmVaultSingleton.Instance;
                 vault.Login("admin", "", "UserUpdater");
 
@@ -102,8 +100,7 @@ namespace UnitTestProject
         [TestMethod]
         public void RemoveUserTest()
         {
-            IEdmFile7 file; //Parent DrawingFile
-            IEdmFolder5 folder;
+            
             IEdmVault7 vault = EdmVaultSingleton.Instance;
             vault.Login("admin", "", "UserUpdater");
 
@@ -115,8 +112,7 @@ namespace UnitTestProject
         [TestMethod]
         public void GetUserObjectUpdateTest()
         {
-            IEdmFile7 file; //Parent DrawingFile
-            IEdmFolder5 folder;
+            
             IEdmVault7 vault = EdmVaultSingleton.Instance;
             vault.Login("admin", "", "UserUpdater");
 
