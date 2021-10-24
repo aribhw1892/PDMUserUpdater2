@@ -20,8 +20,9 @@ namespace UserUpdaterAddIn
         private string mCn;
         //Email address
         private string mUsername;
-        //Login
+        //Operation
         private string mOperation;
+        //Login
         private string mLogin;
 
         public User()

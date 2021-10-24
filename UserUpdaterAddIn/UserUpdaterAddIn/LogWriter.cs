@@ -16,6 +16,7 @@ namespace UserUpdaterAddIn
         //Implement
         //LogWriter.SendErrorToText(e);- will log Error
         //LogWriter.WriteLog("Macro Run Status" + procstatus + "\n" + "Error:" + error); - Write Text to Log
+        //LogWriter
 
 
         private static String ErrorlineNo, Errormsg, extype, exurl, ErrorLocation;

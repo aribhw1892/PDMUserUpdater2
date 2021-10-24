@@ -109,7 +109,7 @@ namespace UnitTestProject
             UserUpdaterAddIn.UserHelper.RemoveUser(vault, user);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void GetUserObjectUpdateTest()
         {
             
