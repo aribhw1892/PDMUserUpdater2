@@ -120,5 +120,22 @@ namespace UnitTestProject
             IEdmUser9 user = UserHelper.GetUserObject(vault, userName);
             //UserHelper.UpdateUser(vault, user);
         }
+
+        [TestMethod]
+        public void AddUserToGroupTest()
+        {
+
+            IEdmVault7 vault = EdmVaultSingleton.Instance;
+            vault.Login("admin", "", "UserUpdater");
+
+            string userName = "admin";
+            IEdmUser9 user = UserHelper.GetUserObject(vault, userName);
+
+            string groupName = "Engineering";
+            IEdmUserGroup8 group = GroupHelper.GetGroupObject(vault, groupName);
+            //UserHelper.UpdateUser(vault, user);
+
+            UserHelper.AddUserToGroup(vault, group, user); 
+        }
     }
 }

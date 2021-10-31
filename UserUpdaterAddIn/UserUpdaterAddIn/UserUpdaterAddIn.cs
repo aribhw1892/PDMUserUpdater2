@@ -57,6 +57,7 @@ namespace UserUpdaterAddIn
             {
                 int winHandle = poCmd.mlParentWnd;
                 IEdmUser9 user;
+                IEdmUserGroup8 group;
                 // Get Vault Object
                 // Obtain the only instance of the IEdmVaultObject
                 vault = EdmVaultSingleton.Instance;
@@ -85,6 +86,19 @@ namespace UserUpdaterAddIn
                     UserHelper.UpdateUser(vault, user, (updateUsersList[i] as User));
                 }
 
+                // Add User To Group
+                //Get users To Remove
+                ArrayList groupUserList = GetUserToAdd(xmlUserData);
+                //Remove Users
+                for (int i = 0; i <= groupUserList.Count - 1; i++)
+                {
+                    //Get User Object
+                    user = UserHelper.GetUserObject(vault, (groupUserList[i] as User).username.Split('@')[0]);
+                    //Get Group Object
+                    group = GroupHelper.GetGroupObject(vault, (groupUserList[i] as User).group.ToString());
+                    UserHelper.AddUserToGroup(vault, group, user);
+                }
+
                 // Remove Users
                 //Get users To Remove
                 ArrayList removeUserList = GetUserToRemove(xmlUserData);
@@ -95,6 +109,8 @@ namespace UserUpdaterAddIn
                     user = UserHelper.GetUserObject(vault, (removeUserList[i] as User).username.Split('@')[0]);
                     UserHelper.RemoveUser(vault, user);
                 }
+
+                
 
             }
 

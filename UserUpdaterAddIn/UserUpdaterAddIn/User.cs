@@ -24,6 +24,8 @@ namespace UserUpdaterAddIn
         private string mOperation;
         //Login
         private string mLogin;
+        //GroupName
+        private string mGroup;
 
         public User()
         {
@@ -70,5 +72,11 @@ namespace UserUpdaterAddIn
             get { return mLogin; }
             set { mLogin = value; }
         }
+        public string group
+        {
+            get { return mGroup; }
+            set { mGroup = value; }
+        }
+
     }
 }

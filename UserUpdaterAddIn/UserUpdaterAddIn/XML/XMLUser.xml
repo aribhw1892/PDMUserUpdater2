@@ -1,44 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfAnyType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <anyType xsi:type="User">
-    <sn>TitlePropUpdated2</sn>
-    <givenName>TitlePropUpdated2</givenName>
-    <title>TitlePropUpdated2</title>
-    <cn>TitlePropUpdated2</cn>
+    <sn>John Updated</sn>
+    <givenName>Doe Updated</givenName>
+    <title>John Doe Title Updated</title>
+    <cn>John Doe Updated</cn>
     <username>jdoe@Updated.com</username>
     <operation>add</operation>
+    <group>Engineering</group>
   </anyType>
   <anyType xsi:type="User">
-    <sn>TitlePropUpdated2</sn>
-    <givenName>TitlePropUpdated2</givenName>
-    <title>TitlePropUpdated2</title>
-    <cn>TitlePropUpdated2</cn>
+    <sn>Jammei</sn>
+    <givenName>Smith</givenName>
+    <title>Jammei Smith Title</title>
+    <cn>Jammei Smith</cn>
     <username>jsmith@yourcompany.com</username>
-    <operation>add</operation>
+    <operation>remove</operation>
+    <group>Engineering</group>
   </anyType>
   <anyType xsi:type="User">
-    <sn>TitleProp</sn>
-    <givenName>TitleProp</givenName>
-    <title>TitleProp</title>
-    <cn>TitleProp</cn>
+    <sn>User1</sn>
+    <givenName>User1 LAst NAme</givenName>
+    <title>User1 Title</title>
+    <cn>User 1 Full Name</cn>
     <username>user1@yourcompany.com</username>
-    <operation>Add</operation>
-  </anyType>
-  <anyType xsi:type="User">
-    <sn>Smith</sn>
-    <givenName>Jane</givenName>
-    <title>Manager</title>
-    <cn>Jane Smith</cn>
-    <username>User2@yourcompany.com</username>
     <operation>remove</operation>
+    <group>Engineering</group>
   </anyType>
-  <anyType xsi:type="User">
-    <sn>TitlePropUpdated</sn>
-    <givenName>TitlePropUpdated</givenName>
-    <title>TitlePropUpdated</title>
-    <cn>TitlePropUpdated</cn>
-    <username>User3@yourcompany.com</username>
-    <operation>remove</operation>
-  </anyType>
-
 </ArrayOfAnyType>

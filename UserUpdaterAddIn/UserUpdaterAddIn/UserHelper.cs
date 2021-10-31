@@ -225,7 +225,7 @@ namespace UserUpdaterAddIn
 
 				if ((group == null))
 				{
-					MessageBox.Show("Group does not exist. Create a Management group.");
+					//MessageBox.Show("Group does not exist. Create a Management group.");
 					return;
 				}
 
@@ -233,7 +233,7 @@ namespace UserUpdaterAddIn
 
 				if ((user == null))
 				{
-					MessageBox.Show("No user set to add to group. Click Add users.");
+					//MessageBox.Show("No user set to add to group. Click Add users.");
 					return;
 				}
 
@@ -242,7 +242,7 @@ namespace UserUpdaterAddIn
 				group.AddMembers(groupMbrIDs);
 				
 
-				MessageBox.Show("User " + user.Name + " added to " + group.Name + " group.");
+				Debug.Print("User " + user.Name + " added to " + group.Name + " group.");
 
 			}
 			catch (System.Runtime.InteropServices.COMException ex)

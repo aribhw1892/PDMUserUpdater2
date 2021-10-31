@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace UserUpdaterAddIn
 {
-    class GroupHelper
+    public class GroupHelper
     {
 		//Add Group To Vault
 
