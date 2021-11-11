@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objs>
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>Selected.System.Management.Automation.PSCustomObject</T>
+      <T>System.Management.Automation.PSCustomObject</T>
+      <T>System.Object</T>
+    </TN>
+    <MS>
+      <Nil N="UserName" />
+      <S N="Groups">Group Policy Creator Owners,Domain Admins,Enterprise Admins,Schema Admins,Performance Log Users,Administrators</S>
+    </MS>
+  </Obj>
+  <Obj RefId="1">
+    <TNRef RefId="0" />
+    <MS>
+      <Nil N="UserName" />
+      <S N="Groups">Guests</S>
+    </MS>
+  </Obj>
+  <Obj RefId="2">
+    <TNRef RefId="0" />
+    <MS>
+      <Nil N="UserName" />
+      <S N="Groups">System Managed Accounts Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="3">
+    <TNRef RefId="0" />
+    <MS>
+      <Nil N="UserName" />
+      <S N="Groups">Denied RODC Password Replication Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="4">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Swapnil Kulkarni</S>
+      <S N="Groups">SQLServerMSASUser$P-SRV-DC$ANEESQL,Anee-Unrestricted-Group,Domain Admins,Enterprise Admins,Distributed COM Users,Performance Log Users,Remote Desktop Users</S>
+      <S N="DesktopProfile">EPDM</S>
+    </MS>
+  </Obj>
+  <Obj RefId="5">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Tejaswini Kulkarni</S>
+      <S N="Groups">Anee-Unrestricted-Group,Distributed COM Users</S>
+      <S N="DesktopProfile">EPDM</S>
+    </MS>
+  </Obj>
+  <Obj RefId="6">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Dev1</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="7">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Dev2</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="8">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Dev3</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="9">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Dev4</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="10">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Chinmay Kulkarni</S>
+      <S N="Groups">Anee-Unrestricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="11">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Test User</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="12">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Sandeep Jinde</S>
+      <S N="Groups">Anee-Unrestricted-Group,Domain Admins</S>
+    </MS>
+  </Obj>
+  <Obj RefId="13">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Test User 2</S>
+      <S N="Groups">Domain Admins</S>
+    </MS>
+  </Obj>
+  <Obj RefId="14">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Dev5</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="15">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">kamal</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="16">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Atharva Gavai</S>
+      <S N="Groups">Anee-Unrestricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="17">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Interview</S>
+      <S N="Groups"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="18">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">TestVPn</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="19">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Pavan</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="20">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Abhay</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="21">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">Design 2</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+  <Obj RefId="22">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="UserName">PDM</S>
+      <S N="Groups">AneeIndia-Restricted-Group</S>
+    </MS>
+  </Obj>
+</Objs>

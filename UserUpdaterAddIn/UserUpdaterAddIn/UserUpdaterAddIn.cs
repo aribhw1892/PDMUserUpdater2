@@ -65,55 +65,60 @@ namespace UserUpdaterAddIn
                 
                 //Get All User Data from XML
                     //*8Change before Release
-                string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+                string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\UserGroupV1.xml";
                 //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
-                ArrayList xmlUserData = XMLHelper.XmlUserReader(xmlPath);
+                //ArrayList xmlUserData = XMLHelper.XmlUserReader(xmlPath);
+                ArrayList xmlUserData = XMLHelper.AdXmlReader(xmlPath);
+
+                ////Add USER
+                ////Get users To Add
+                //ArrayList addUserList = GetUserToAdd(xmlUserData);
+                ////Add Users -Removed as it is not a requirement
+                //UserHelper.AddUser(vault, addUserList);
                 
-                //Add USER
-                //Get users To Add
-                ArrayList addUserList = GetUserToAdd(xmlUserData);
-                //Add Users
-                UserHelper.AddUser(vault, addUserList);
-                
-                //Update USERS
+                //Show Users Not In PDM.
                 List<string> vaultUsers = UserHelper.GetAllUserFromVault(vault);
-                ArrayList updateUsersList = GetUserToUpdate(xmlUserData, vaultUsers);
-
-                for (int i = 0; i <= updateUsersList.Count - 1; i++)
+                ArrayList userNotInPDM = UserNotInPDM(xmlUserData, vaultUsers);
+                string userNotInPDMstr = "";
+                for (int i = 0; i <= userNotInPDM.Count - 1; i++)
                 {
                     //Get User Object
-                    user = UserHelper.GetUserObject(vault, (updateUsersList[i] as User).username.Split('@')[0]);
-                    UserHelper.UpdateUser(vault, user, (updateUsersList[i] as User));
+                    userNotInPDMstr = userNotInPDMstr + "\n" + (userNotInPDM[i] as User).login.ToString();
+                    //UserHelper.UpdateUser(vault, user, (userNotInPDM[i] as User));
                 }
+                MessageBox.Show("Below Users are not in PDM:" + "\n" + userNotInPDMstr);
 
-                // Add User To Group
-                //Get users To Remove
-                ArrayList groupUserList = GetUserToAdd(xmlUserData);
-                //Remove Users
-                for (int i = 0; i <= groupUserList.Count - 1; i++)
-                {
-                    //Get User Object
-                    user = UserHelper.GetUserObject(vault, (groupUserList[i] as User).username.Split('@')[0]);
-                    //Get Group Object
-                    group = GroupHelper.GetGroupObject(vault, (groupUserList[i] as User).group.ToString());
-                    UserHelper.AddUserToGroup(vault, group, user);
-                }
+                //// Add User To Group
+                ////Get users To Remove
+                //ArrayList groupUserList = GetUserToAdd(xmlUserData);
+                ////Remove Users
+                //for (int i = 0; i <= groupUserList.Count - 1; i++)
+                //{
+                //    //Get User Object
+                //    user = UserHelper.GetUserObject(vault, (groupUserList[i] as User).username.Split('@')[0]);
+                //    //Get Group Object
+                //    group = GroupHelper.GetGroupObject(vault, (groupUserList[i] as User).group.ToString());
+                //    UserHelper.AddUserToGroup(vault, group, user);
+                //}
 
                 // Remove Users
                 //Get users To Remove
-                ArrayList removeUserList = GetUserToRemove(xmlUserData);
+                ArrayList removeUserList = GetUserToRemove(xmlUserData, vaultUsers);
                 //Remove Users
+                string userRemovedstr = "";
                 for (int i = 0; i <= removeUserList.Count - 1; i++)
                 {
                     //Get User Object
-                    user = UserHelper.GetUserObject(vault, (removeUserList[i] as User).username.Split('@')[0]);
-                    UserHelper.RemoveUser(vault, user);
+                    user = UserHelper.GetUserObject(vault, (removeUserList[i] as User).login);
+                    if ((removeUserList[i] as User).login != "Admin")
+                    {
+                        UserHelper.RemoveUser(vault, user);
+                        userRemovedstr = userRemovedstr + "\n" + (removeUserList[i] as User).login.ToString();
+                    }
+                    
                 }
-
-                
-
+                MessageBox.Show("Removed Users Not Available in Active Directory:" + "\n" + userRemovedstr);
             }
-
         }
         // Get All User To Add 
         public static ArrayList GetUserToAdd(ArrayList allUserData)
@@ -128,31 +133,52 @@ namespace UserUpdaterAddIn
             return addUser;
         }
         // Get All User To Update
-        public static ArrayList GetUserToUpdate(ArrayList allUserData, List<string> vaultUsers)
+        public static ArrayList UserNotInPDM(ArrayList allUserData, List<string> vaultUsers)
         {
-            ArrayList updateUser = new ArrayList();
+            ArrayList userNotInPDM = new ArrayList();
             for (int i = 0; i <= allUserData.Count - 1; i++)
             {
-                if (vaultUsers.Any(e => e == (allUserData[i] as User).username.ToLower().Split('@')[0]))
+                if (vaultUsers.Any(e => e == (allUserData[i] as User).login))
+                //if (vaultUsers.Any(e => e == (allUserData[i] as User).username.ToLower().Split('@')[0]))
                 {
-                    updateUser.Add(allUserData[i] as User);
+                    
                 }
+                else
+                {
+                    userNotInPDM.Add(allUserData[i] as User);
+                }
+                
             }
-            return updateUser;
+            return userNotInPDM;
         }
-        // Get All User To Remove
-        public static ArrayList GetUserToRemove(ArrayList allUserData)
+        public static ArrayList GetUserToRemove(ArrayList allUserData, List<string> vaultUsers)
         {
             ArrayList removeUser = new ArrayList();
-            var addUserList = from User e in allUserData where e.operation.ToLower().Equals("remove") select e;
-            foreach (var user in addUserList)
+            foreach (string user in vaultUsers)
             {
-                removeUser.Add(user);
+                var test = from User e in allUserData where e.login.Equals(user) select e;
+                if (test.Count() == 0)
+                {
+                    User removeUserObj = new User();
+                    removeUserObj.login = user;
+                    removeUser.Add(removeUserObj);
+                }
             }
-
             return removeUser;
         }
-        
+        // Get All User To Remove
+        //public static ArrayList GetUserToRemove(ArrayList allUserData)
+        //{
+        //    ArrayList removeUser = new ArrayList();
+        //    var addUserList = from User e in allUserData where e.operation.ToLower().Equals("remove") select e;
+        //    foreach (var user in addUserList)
+        //    {
+        //        removeUser.Add(user);
+        //    }
+
+        //    return removeUser;
+        //}
+
 
 
     }

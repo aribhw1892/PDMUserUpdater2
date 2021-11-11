@@ -59,6 +59,7 @@
     <Compile Include="XMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="XML\UserGroupV1.xml" />
     <Content Include="XML\XMLUser.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

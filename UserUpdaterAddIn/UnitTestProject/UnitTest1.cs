@@ -17,6 +17,7 @@ using System.Xml.Serialization;
 using System.Xml;
 
 
+
 namespace UnitTestProject
 {
     [TestClass]
@@ -52,14 +53,28 @@ namespace UnitTestProject
         [TestMethod]
         public void XmlUserReaderTest()
         {
-            
-            IEdmVault7 vault = EdmVaultSingleton.Instance;
-            vault.Login("admin", "", "UserUpdater");
+            try
+            {
+                IEdmVault7 vault = EdmVaultSingleton.Instance;
+                vault.Login("admin", "", "UserUpdater");
 
-            string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
-            //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
-            ArrayList xmlData = UserUpdaterAddIn.XMLHelper.XmlUserReader(xmlPath);
+                string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+                //ReadXmlFile(xmlPath);
+                //Xml(xmlPath);
+                //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
+                ArrayList xmlData = UserUpdaterAddIn.XMLHelper.XmlUserReader(xmlPath);
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
+            {
+                MessageBox.Show("HRESULT = 0x" + ex.ErrorCode.ToString("X") + "\n" + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
+       
 
         [TestMethod]
         public void AddUserTest()
@@ -67,10 +82,13 @@ namespace UnitTestProject
             try
             {
                 
+                
                 IEdmVault7 vault = EdmVaultSingleton.Instance;
                 vault.Login("admin", "", "UserUpdater");
 
                 string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\XMLUser.xml";
+
+                
                 //string xmlPath = Path.Combine(Environment.CurrentDirectory, @"XML\XMLUser.xml");
                 ArrayList xmlData = UserUpdaterAddIn.XMLHelper.XmlUserReader(xmlPath);
                 var addUserList = from User e in xmlData where e.operation.ToLower().Equals("add") select e;
@@ -95,6 +113,14 @@ namespace UnitTestProject
 
             // Can be passed the whole array without filtering ass existing User will not add.
 
+        }
+
+        
+        [TestMethod]
+        public void AdXmlReader()
+        {
+            string xmlPath = "G:\\WORK\\SOURCE_REPS\\PDMUserUpdater\\UserUpdaterAddIn\\UserUpdaterAddIn\\XML\\UserGroupV1.xml";
+            ArrayList xmlData = UserUpdaterAddIn.XMLHelper.AdXmlReader(xmlPath);
         }
 
         [TestMethod]
